@@ -7,7 +7,6 @@ interface SearchProps {
 
 function Search({ searchTerm, setSearchTerm }: SearchProps) {
 
-  console.log(searchTerm);
   return (
     <div className="search">
       <div>
