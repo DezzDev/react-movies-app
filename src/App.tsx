@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { useDebounce } from "react-use";
 import Search from "./components/Search"
 import { Movie } from "./types/movie";
 import Spinner from "./components/Spinner";
@@ -19,6 +20,13 @@ function App() {
   const [errorMessage, setErrorMessage] = useState("")
   const [movieList, setMovieList] = useState([])
   const [isLoading, setIsLoading] = useState(false)
+  const [debounceSearchTerm , setDebounceSearchTerm ] = useState("")
+  
+  // Debounce the search term to prevent making too many requests
+  // by waiting for the user to stop typing for 500ms
+  useDebounce(() => {
+    setDebounceSearchTerm(searchTerm)
+  }, 500, [searchTerm])
 
   const fetchMovies = async (query="") => {
     setIsLoading(true)
@@ -54,10 +62,10 @@ function App() {
   }
 
   useEffect(() => {
-    fetchMovies(searchTerm)
+    fetchMovies(debounceSearchTerm)
 
 
-  }, [searchTerm])
+  }, [debounceSearchTerm])
   return (
     <main>
       <div className="pattern" />
@@ -71,7 +79,7 @@ function App() {
         </header>
 
         <section className="all-movies">
-          <h2 className="mt-[40px]">All Movies</h2>
+          <h2 className="mt-[40px]">Popular</h2>
 
           {isLoading ? (
             <Spinner />
